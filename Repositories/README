@@ -1,0 +1,3 @@
+# Repositories
+These classes should be used to interract with the database to obtain and
+update the data described as Models.

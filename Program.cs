@@ -7,10 +7,10 @@ namespace BDProject
 	{
 		static void Main()
 		{
-			var nancyHost = new NancyHost(new Uri("http://localhost:8888/nancy/"), new Uri("http://127.0.0.1:8888/nancy/"), new Uri("http://localhost:8889/nancytoo/"));
+			var nancyHost = new NancyHost(new Uri("http://localhost:8080/"));
 			nancyHost.Start();
 
-			Console.WriteLine("Nancy now listening - navigating to http://localhost:8888/nancy/. Press enter to stop");
+			Console.WriteLine("Nancy now listening on http://localhost:8080/. \nPress enter to stop...");
 			Console.ReadKey();
 
 			nancyHost.Stop();

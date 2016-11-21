@@ -32,6 +32,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Program.cs" />
+    <Compile Include="NancyModules\HomeModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Nancy">
@@ -40,8 +41,14 @@
     <Reference Include="Nancy.Hosting.Self">
       <HintPath>packages\Nancy.Hosting.Self.1.4.1\lib\net40\Nancy.Hosting.Self.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="NancyModules\" />
   </ItemGroup>
 </Project>
