@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="NancyModules\HomeModule.cs" />
+    <Compile Include="DBHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Nancy">
@@ -51,6 +52,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
