@@ -7,7 +7,7 @@ namespace BDProject.NancyModules
 	{
 		public HomeModule()
 		{
-			Get["/"] = (@params) => "Hello World!";
+			Get["/"] = (@params) => View["Views/Home/Index.cshtml"];
 		}
 	}
 }
