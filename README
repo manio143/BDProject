@@ -1,0 +1,23 @@
+This project is a tool for anylising dmesg startup output
+
+dmesg format
+	<level>[time] msg
+	<level>[time] [source] msg
+	<level>[time] source: msg
+
+msg_id is the primary key
+
+msg_id -> level
+msg_id -> time -> msg
+msg_id -> source
+
+We get:
+- browsing
+- list sources
+- filter msg by source/level/timespan
+- stats:
+	- number of msg of each priority
+	- number of sources
+	- source with most messages
+	- source with most errors [[msg with level > 4]]
+- kernel version [[msg starts with 'Linux version']]
