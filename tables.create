@@ -1,0 +1,14 @@
+CREATE TABLE Messages (
+      id INTEGER NOT NULL PRIMARY KEY,
+      time NUMBER(10, 6) NOT NULL,
+      msg VARCHAR2(255) NOT NULL,
+      "level" INTEGER);
+
+CREATE TABLE Sources (
+      id INTEGER NOT NULL PRIMARY KEY,
+      source VARCHAR2(45) NOT NULL);
+
+CREATE TABLE MessageSources (
+      id INTEGER NOT NULL PRIMARY KEY,
+      msg_id INTEGER NOT NULL CONSTRAINT FK_msg REFERENCES Messages(id),
+      source_id INTEGER NOT NULL CONSTRAINT FK_source REFERENCES Sources(id));

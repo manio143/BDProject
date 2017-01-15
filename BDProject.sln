@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDProject", "BDProject.csproj", "{0041722F-9070-4D06-BCF6-6B8B761114D5}"
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "BDProject", "BDProject.fsproj", "{394BF4B2-A5E0-4C11-9943-36D5D20FA572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,9 +9,9 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0041722F-9070-4D06-BCF6-6B8B761114D5}.Debug|x86.ActiveCfg = Debug|x86
-		{0041722F-9070-4D06-BCF6-6B8B761114D5}.Debug|x86.Build.0 = Debug|x86
-		{0041722F-9070-4D06-BCF6-6B8B761114D5}.Release|x86.ActiveCfg = Release|x86
-		{0041722F-9070-4D06-BCF6-6B8B761114D5}.Release|x86.Build.0 = Release|x86
+		{394BF4B2-A5E0-4C11-9943-36D5D20FA572}.Debug|x86.ActiveCfg = Debug|x86
+		{394BF4B2-A5E0-4C11-9943-36D5D20FA572}.Debug|x86.Build.0 = Debug|x86
+		{394BF4B2-A5E0-4C11-9943-36D5D20FA572}.Release|x86.ActiveCfg = Release|x86
+		{394BF4B2-A5E0-4C11-9943-36D5D20FA572}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 EndGlobal

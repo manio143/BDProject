@@ -1,0 +1,17 @@
+CREATE TABLE Messages (
+      id INT NOT NULL PRIMARY KEY,
+      time DECIMAL(10, 6) NOT NULL,
+      msg VARCHAR(255) NOT NULL,
+      level INT);
+
+CREATE TABLE Sources (
+      id INT NOT NULL PRIMARY KEY,
+      source VARCHAR(45) NOT NULL);
+
+CREATE TABLE MessageSources (
+      id INT NOT NULL PRIMARY KEY,
+      msg_id INT NOT NULL,
+      source_id INT NOT NULL,
+      FOREIGN KEY FK_msg (msg_id)  REFERENCES Messages(id),
+      FOREIGN KEY FK_source (source_id) REFERENCES Sources(id));
+

@@ -1,3 +1,0 @@
-# Nancy Modules
-Nancy uses custom classes that inherit from `NancyModule` to build a behaviour
-index via Reflection.
