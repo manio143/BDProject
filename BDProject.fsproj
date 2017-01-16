@@ -61,6 +61,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Database.fs" />
     <Compile Include="Models.fs" />
+    <Compile Include="Parser.fs" />
     <Compile Include="DataAccess.fs" />
     <Compile Include="Web.fs" />
     <Compile Include="Program.fs" />
