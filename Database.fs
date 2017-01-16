@@ -1,27 +1,35 @@
 ﻿module Database
 
-    open FSharp.Data.Sql    
+    open Dapper
 
-    let [<Literal>] private resolutionPath = __SOURCE_DIRECTORY__ + "/bin/Debug/"
+    open System.Data.Common
 
-    type mySql = SqlDataProvider<
-                        ConnectionString = "Server=localhost;Database=inf;Uid=root;Pwd=root;",
-                        DatabaseVendor = Common.DatabaseProviderTypes.MYSQL,
-                        ResolutionPath = resolutionPath,
-                        IndividualsAmount = 1000,
-                        UseOptionTypes = true >
+    type DatabaseType = MySQL | Oracle
 
-    //type oracleSql = SqlDataProvider<
-    //                    ConnectionString = "DataSource=myOracleDb;User Id=md370784;Pwd=Meninblack1;",
-    //                    DatabaseVendor = Common.DatabaseProviderTypes.ORACLE,
-    //                    ResolutionPath = resolutionPath,
-    //                    IndividualsAmount = 1000,
-    //                    UseOptionTypes = true >
-                        
-    type SqlDatabase = MySQL | Oracle
+    module MySQL =
 
-    let openDb db = 
-        match db with
-        | MySQL -> mySql.GetDataContext()
-        | Oracle -> raise (new System.NotImplementedException())//oracleSql.GetDataContext()
+        open MySql.Data.MySqlClient
 
+        let private connectionStr = System.Configuration.ConfigurationManager.ConnectionStrings.["mySqlCnnStr"].ConnectionString
+        let createConnection () = new MySqlConnection(connectionStr)
+
+    module Oracle =
+
+        open Oracle.ManagedDataAccess.Client
+
+        let private connectionStr = System.Configuration.ConfigurationManager.ConnectionStrings.["oracleCnnStr"].ConnectionString
+        let createConnection () = new OracleConnection(connectionStr)
+
+    let ``open`` db =
+        let cnn = 
+            match db with
+            | MySQL -> MySQL.createConnection() :> DbConnection
+            | Oracle -> Oracle.createConnection() :> DbConnection
+        cnn.Open()
+        cnn
+
+    let query<'a> cnn (cmd:string) = 
+        Dapper.SqlMapper.Query<'a>(cnn, cmd)
+
+    let execute cnn (cmd:string) =
+        Dapper.SqlMapper.Execute(cnn, cmd)
