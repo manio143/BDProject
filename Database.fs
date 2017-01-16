@@ -28,8 +28,8 @@
         cnn.Open()
         cnn
 
-    let query<'a> cnn (cmd:string) = 
-        Dapper.SqlMapper.Query<'a>(cnn, cmd)
+    let inline query<'a, 'b> cnn (cmd:string) (param:'b) = 
+        Dapper.SqlMapper.Query<'a>(cnn, cmd, param)
 
-    let execute cnn (cmd:string) =
-        Dapper.SqlMapper.Execute(cnn, cmd)
+    let inline execute cnn (cmd:string) (param:'a) =
+        Dapper.SqlMapper.Execute(cnn, cmd, param)
