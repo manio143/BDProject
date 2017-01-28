@@ -12,7 +12,18 @@
                     Level: System.Nullable<int>;
                     Source: string;
                    }
-    type LinuxKernel = {Version: decimal; Architecture: string}
+    type LinuxKernel = {Version: string}
+
+    type PriorityWithCount = {Priority: int; Count: int64;}
+
+    type Statistics = {
+                        Msgs: int;
+                        MsgsByPriority: PriorityWithCount list;
+                        Sources: int;
+                        SourceWithMostMsgs: string;
+                        SourceWithMostErrors: string;
+                        KernelVersion: LinuxKernel;
+                      }
 
     module Parameters =
         type SourceParam = {Id: int; Src: string}
