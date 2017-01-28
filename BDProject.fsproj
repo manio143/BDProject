@@ -28,14 +28,8 @@
     <Reference Include="FSharp.Core">
       <HintPath>packages\FSharp.Core.4.0.0.1\lib\net40\FSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Suave">
-      <HintPath>packages\Suave.2.0.0\lib\net40\Suave.dll</HintPath>
-    </Reference>
     <Reference Include="DotLiquid">
       <HintPath>packages\DotLiquid.2.0.64\lib\net451\DotLiquid.dll</HintPath>
-    </Reference>
-    <Reference Include="Suave.DotLiquid">
-      <HintPath>packages\Suave.DotLiquid.2.0.0\lib\net40\Suave.DotLiquid.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Data">
       <HintPath>packages\FSharp.Data.2.3.2\lib\net40\FSharp.Data.dll</HintPath>
@@ -56,6 +50,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
+    <Reference Include="Suave">
+      <HintPath>packages\Suave.2.0.2\lib\net40\Suave.dll</HintPath>
+    </Reference>
+    <Reference Include="Suave.DotLiquid">
+      <HintPath>packages\Suave.DotLiquid.2.0.2\lib\net40\Suave.DotLiquid.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
