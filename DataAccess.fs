@@ -60,8 +60,34 @@
 
     let getAllSources () =
         let queryString = "SELECT source FROM Sources;"
-        query<string> queryString |> List.ofSeq
+        query<string> queryString
 
     let getMessagesFromSource src =
         let queryString = composeQuery "WHERE source = @Src"
         queryP<Message, SourceParam> queryString {Src = src; Id = 0}
+
+    let getKernellVersion () =
+        let queryString = composeQuery "WHERE msg like \"Linux version%\""
+        let msg = query<Message> queryString |> Seq.head
+        match msg.Msg with
+        | Parser.Regex "Linux version ([0-9\.-]+) .*" [ver] ->
+            {Version = ver}
+        | _ -> {Version = "N/A"}
+
+    let getStatistics () =
+        let msgs = query<int> "SELECT COUNT(*) FROM Messages" |> Seq.head
+        let prwc = query<PriorityWithCount> "SELECT level as Priority, COUNT(*) as Count FROM Messages GROUP BY level;"
+        let sources = query<int> "SELECT COUNT(*) FROM Sources" |> Seq.head
+        let swmm = query<string> "SELECT source FROM Sources 
+                                  JOIN MessageSources ON (Sources.id = MessageSources.source_id)
+                                  GROUP BY source
+                                  ORDER BY COUNT(*) DESC;" |> Seq.head
+        let swme =
+            let s = query<string> "SELECT source FROM Sources
+                                  JOIN MessageSources ON (Sources.id = MessageSources.source_id)
+                                  LEFT JOIN Messages ON (Messages.id = MessageSources.msg_id)
+                                  WHERE Messages.level > 4
+                                  GROUP BY source
+                                  ORDER BY COUNT(*) DESC;"
+            if Seq.isEmpty s then null else s |> Seq.head
+        {MsgsByPriority = List.ofSeq prwc; Sources = sources; SourceWithMostMsgs = swmm; SourceWithMostErrors = swme; KernelVersion = getKernellVersion(); Msgs = msgs}
