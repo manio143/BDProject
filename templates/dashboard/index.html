@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Dmesg viewer</title>
+		<link rel="stylesheet" href="/css/patternfly-additions.min.css">
+		<link rel="stylesheet" href="/css/animations.css">
+         <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+
+		 <style>
+          .alert-dismissable {padding-right: 28px;}.alert {border-width: 1px;padding-left: 47px;padding-right: 14px;position: relative;}.alert-danger {background-color: #ffe6e6;border-color: #c00;color: #363636;}.alert-dismissable, .alert-dismissible {padding-right: 31px;}.alert {padding: 11px;border: 1px solid transparent;border-radius: 1px;}.alert, .thumbnail {margin-bottom: 20px;}
+		 </style>
+	</head>
+	<body>
+
+		<h2>
+			Dashboard
+		</h2>
+        <div>
+            <h4>Statistics</h4>
+            <table>
+                <tr><td>Number of messages:</td> <td>{{ model.Msgs }}</td></tr>
+                <tr><td>Number of sources:</td> <td>{{ model.Sources }}</td></tr>
+                <tr><td>Source with most messages:</td> <td>{{ model.Source_With_Most_Msgs }}</td></tr>
+                {% if model.Source_With_Most_Errors %}<tr><td>Source with most errors:</td> <td>{{ model.Source_With_Most_Errors}}</td></tr>{% endif %}
+                <tr><td>Linux version:</td> <td>{{ model.Kernel_Version.Version }}</td></tr>
+            </table>
+        </div>
+	</body>
+</html>

@@ -8,7 +8,7 @@
     open Suave.Filters
     open Suave.RequestErrors
 
-    DotLiquid.setTemplatesDir (__SOURCE_DIRECTORY__ + "/templates")
+    DotLiquid.setTemplatesDir "./templates"
 
     type Result<'a, 'b> = Success of 'a | Failure of 'b
 
