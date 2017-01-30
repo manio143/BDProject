@@ -13,14 +13,14 @@
 
     let parseLine line =
         match line with
-        | Regex @"<([0-9])>\[\s*([0-9]*\.[0-9]{6})\]\s(.*?: |\[.*\] )(.*)" [level; time; source; msg] ->
+        | Regex @"<([0-9])>\[\s*([0-9]*\.[0-9]{6})\]\s(.{1,45}?: |\[.{1,45}\] )(.*)" [level; time; source; msg] ->
             let level = int level
             let time = decimal time
             let source = 
                 if source.StartsWith("[") then source.Substring(1, source.Length - 2)
                 else source.Substring(0, source.Length - 2)
             Some ({Id = 0; Msg = msg; Level = nullable level; Source = source; Time = time})
-        | Regex @"\[\s*([0-9]*\.[0-9]{6})\]\s(.*?: |\[.*\] )(.*)" [time; source; msg] ->
+        | Regex @"\[\s*([0-9]*\.[0-9]{6})\]\s(.{1,45}?: |\[.{1,45}\] )(.*)" [time; source; msg] ->
             let time = decimal time
             let source = 
                 if source.StartsWith("[") then source.Substring(1, source.Length - 2)
