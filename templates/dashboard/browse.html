@@ -112,11 +112,13 @@
             </div>
         </div> -->
 
+        <div width="100%">
+            <a href="/dashboard">Back to dashboard</a>
+        </div>
         <!-- Table HTML -->
         <table class="table table-striped table-bordered table-hover" id="table1">
             <thead>
                 <tr>
-                    <th><label class="sr-only" for="selectAll">Select all rows</label><input type="checkbox" id="selectAll" name="selectAll"></th>
                     <th>Time</th>
                     <th>Source</th>
                     <th>Message</th>
@@ -154,158 +156,61 @@
 
     
 
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.dataTables.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script>
             $(document).ready(function () {
 
                 // JSON data for Table View
-                var dataSet = [{
-                    time: "Trident",
-                    source: "Internet Explorer 4.0",
-                    message: "Win 95+",
-                    priority: "4"
-                }, {
-                    time: "Trident",
-                    source: "Internet Explorer 5.0",
-                    message: "Win 95+",
-                    priority: "5"
-                }, {
-                    time: "Trident",
-                    source: "Internet Explorer 5.5",
-                    message: "Win 95+",
-                    priority: "5.5"
-                }, {
-                    time: "Trident",
-                    source: "Internet Explorer 6",
-                    message: "Win 98+",
-                    priority: "6"
-                }, {
-                    time: "Trident",
-                    source: "Internet Explorer 7",
-                    message: "Win XP SP2+",
-                    priority: "7"
-                }, {
-                    time: "Trident",
-                    source: "AOL source (AOL desktop)",
-                    message: "Win XP",
-                    priority: "6"
-                }, {
-                    time: "Gecko",
-                    source: "Firefox 1.0",
-                    message: "Win 98+ / OSX.2+",
-                    priority: "1.7"
-                }, {
-                    time: "Gecko",
-                    source: "Firefox 1.5",
-                    message: "Win 98+ / OSX.2+",
-                    priority: "1.8"
-                }, {
-                    time: "Gecko",
-                    source: "Firefox 2.0",
-                    message: "Win 98+ / OSX.2+",
-                    priority: "1.8"
-                }, {
-                    time: "Gecko",
-                    source: "Firefox 3.0",
-                    message: "Win 2k+ / OSX.3+",
-                    priority: "1.9"
-                }, {
-                    time: "Gecko",
-                    source: "Camino 1.0",
-                    message: "OSX.2+",
-                    priority: "1.8"
-                }, {
-                    time: "Gecko",
-                    source: "Camino 1.5",
-                    message: "OSX.3+",
-                    priority: "1.8"
-                }, {
-                    time: "Gecko",
-                    source: "Netscape 7.2",
-                    message: "Win 95+ / Mac OS 8.6-9.2",
-                    priority: "1.7"
-                }, {
-                    time: "Gecko",
-                    source: "Netscape source 8",
-                    message: "Win 98SE+",
-                    priority: "1.7"
-                }, {
-                    time: "Gecko",
-                    source: "Netscape Navigator 9",
-                    message: "Win 98+ / OSX.2+",
-                    priority: "1.8"                    
-                }, {
-                    time: "Gecko",
-                    source: "Mozilla 1.0",
-                    message: "Win 95+ / OSX.1+",
-                    priority: "1"                    
-                }, {
-                    time: "Gecko",
-                    source: "Mozilla 1.1",
-                    message: "Win 95+ / OSX.1+",
-                    priority: "1.1"                    
-                }, {
-                    time: "Gecko",
-                    source: "Mozilla 1.2",
-                    message: "Win 95+ / OSX.1+",
-                    priority: "1.2"                    
-                }];
+                var dataSet = [
+                    {% for m in model -%}
+                    {
+                    time: "{{ m.Time }}",
+                    source: "{{ m.Source | replace:'"','\"' }}",
+                    message: "{{ m.Msg | replace:'"','\"' }}",
+                    priority: "{{ m.Level }}"
+                }{% unless forloop.last %},{% endunless %}
+                    {% endfor -%}
+                ];
 
                 // DataTable Config
                 $("#table1").DataTable({
+                    "scrollY": "400px",
+                    //"scrollCollapse": true,
+                    paging: false,
                     columns: [
-                        {
-                            data: null,
-                            className: "table-view-pf-select",
-                            render: function (data, type, full, meta) {
-                                // Select row checkbox renderer
-                                var id = "select" + meta.row;
-                                return '<label class="sr-only" for="' + id + '">Select row ' + meta.row +
-                                    '</label><input type="checkbox" id="' + id + '" name="' + id + '">';
-                            },
-                            sortable: false
-                        },
                         { data: "time" },
                         { data: "source" },
                         { data: "message" },
                         { data: "priority" }
                     ],
                     data: dataSet,
-                    dom: "t",
-                    language: {
-                        zeroRecords: "No records found"
-                    },
-                    order: [[1, 'asc']],
-                    pfConfig: {
-                        emptyStateSelector: "#emptyState1",
-                        filterCols: [
-                            null,
-                            {
-                                default: true,
-                                optionSelector: "#filter1",
-                                placeholder: "Filter By Rendering time..."
-                            }, {
-                                optionSelector: "#filter2",
-                                placeholder: "Filter By source..."
-                            }, {
-                                optionSelector: "#filter3",
-                                placeholder: "Filter By Platform(s)..."
-                            }, {
-                                optionSelector: "#filter4",
-                                placeholder: "Filter By time priority..."
-                            }, {
-                                optionSelector: "#filter5",
-                                placeholder: "Filter By CSS Grade..."
-                            }
-                        ],
-                        toolbarSelector: "#toolbar1",
-                        selectAllSelector: 'th:first-child input[type="checkbox"]'
-                    },
-                    select: {
-                        selector: 'td:first-child input[type="checkbox"]',
-                        style: 'multi'
-                    },
+                    //dom: "t",
+                    // language: {
+                    //     zeroRecords: "No records found"
+                    // },
+                    // order: [[0, 'asc']],
+                    // pfConfig: {
+                    //     filterCols: [
+                    //         {
+                    //             default: true,
+                    //             optionSelector: "#filter1",
+                    //             placeholder: "Filter By Rendering time..."
+                    //         }, {
+                    //             optionSelector: "#filter2",
+                    //             placeholder: "Filter By source..."
+                    //         }, {
+                    //             optionSelector: "#filter3",
+                    //             placeholder: "Filter By Platform(s)..."
+                    //         }, {
+                    //             optionSelector: "#filter4",
+                    //             placeholder: "Filter By time priority..."
+                    //         }, {
+                    //             optionSelector: "#filter5",
+                    //             placeholder: "Filter By CSS Grade..."
+                    //         }
+                    //     ]
+                    // }
                 });
 
                 /**
@@ -317,38 +222,38 @@
                 * @param {string} config.restoreRowsSelector - Selector for restore rows control
                 * @param {string} config.tableSelector - Selector for the HTML table
                 */
-                var emptyTableViewUtil = function (config) {
-                    var self = this;
+                // var emptyTableViewUtil = function (config) {
+                //     var self = this;
 
-                    this.dt = $(config.tableSelector).DataTable(); // DataTable
-                    this.deleteRows = $(config.deleteRowsSelector); // Delete rows control
-                    this.restoreRows = $(config.restoreRowsSelector); // Restore rows control
+                //     this.dt = $(config.tableSelector).DataTable(); // DataTable
+                //     this.deleteRows = $(config.deleteRowsSelector); // Delete rows control
+                //     this.restoreRows = $(config.restoreRowsSelector); // Restore rows control
 
-                    // Handle click on delete rows control
-                    this.deleteRows.on('click', function () {
-                        self.dt.clear().draw();
-                        $(self.restoreRows).prop("disabled", false);
-                    });
+                //     // Handle click on delete rows control
+                //     this.deleteRows.on('click', function () {
+                //         self.dt.clear().draw();
+                //         $(self.restoreRows).prop("disabled", false);
+                //     });
 
-                    // Handle click on restore rows control
-                    this.restoreRows.on('click', function () {
-                        self.dt.rows.add(config.data).draw();
-                        $(this).prop("disabled", true);
-                    });
+                //     // Handle click on restore rows control
+                //     this.restoreRows.on('click', function () {
+                //         self.dt.rows.add(config.data).draw();
+                //         $(this).prop("disabled", true);
+                //     });
 
-                    // Initialize restore rows
-                    if (this.dt.data().length === 0) {
-                        $(this.restoreRows).prop("disabled", false);
-                    }
-                };
+                //     // Initialize restore rows
+                //     if (this.dt.data().length === 0) {
+                //         $(this.restoreRows).prop("disabled", false);
+                //     }
+                // };
 
-                // Initialize empty Table View util
-                new emptyTableViewUtil({
-                    data: dataSet,
-                    deleteRowsSelector: "#deleteRows1",
-                    restoreRowsSelector: "#restoreRows1",
-                    tableSelector: "#table1"
-                });
+                // // Initialize empty Table View util
+                // new emptyTableViewUtil({
+                //     data: dataSet,
+                //     deleteRowsSelector: "#deleteRows1",
+                //     restoreRowsSelector: "#restoreRows1",
+                //     tableSelector: "#table1"
+                // });
 
                 /**
                 * Utility to find items in Table View
@@ -368,14 +273,6 @@
                 // Initialize find util
                 new findTableViewUtil();
 
-            });
-        </script>
-
-
-<script>
-            // Initialize Datatables
-            $(document).ready(function () {
-                $('.datatable').dataTable();
             });
         </script>
 </body>

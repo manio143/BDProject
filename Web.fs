@@ -42,7 +42,7 @@
     module Dashboard =
         let index = request (fun _ -> DotLiquid.page "dashboard/index.html" (DataAccess.getStatistics()))
 
-        let browse = request (fun req -> DotLiquid.page "dashboard/browse.html" None)
+        let browse = request (fun req -> DotLiquid.page "dashboard/browse.html" (DataAccess.getAllMessages()))
 
         let filter = choose [
                         path "/dashboard" >=> index
