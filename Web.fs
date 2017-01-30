@@ -40,11 +40,13 @@
             request ``process``
                 
     module Dashboard =
-        let index () = request (fun _ -> DotLiquid.page "dashboard/index.html" (DataAccess.getStatistics()))
+        let index = request (fun _ -> DotLiquid.page "dashboard/index.html" (DataAccess.getStatistics()))
+
+        let browse = request (fun req -> DotLiquid.page "dashboard/browse.html" None)
 
         let filter = choose [
-                        path "/dashboard" >=> index()
-                        path "/dashboard/browse" >=> OK "Not implemented yet"
+                        path "/dashboard" >=> index
+                        path "/dashboard/browse" >=> browse
                         ]
 
     let mainApp = 
