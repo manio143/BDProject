@@ -33,3 +33,6 @@
 
     let inline execute cnn (cmd:string) (param:'a) =
         Dapper.SqlMapper.Execute(cnn, cmd, param)
+
+    
+    let chosenDb = Oracle
