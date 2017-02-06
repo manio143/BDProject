@@ -1,6 +1,4 @@
-trap '' INT
 while (( true ))
 do
-	xbuild
-	bin/Debug/BDProject.exe
+	xbuild && bin/Debug/BDProject.exe || break
 done

@@ -22,15 +22,17 @@
         
         let post =
             let ``process`` httpRequest =
+                if httpRequest.files |> List.isEmpty then index (Some "Pusty plik")
+                else
                 use reader = File.OpenText httpRequest.files.Head.tempFilePath
-                let rec readAndParse list (reader:StreamReader) i =
+                let rec readAndParse list (reader:StreamReader) i f first =
                     match reader.EndOfStream with
-                    | true -> Success list
+                    | true -> if f < i/5 then Success list else Failure first
                     | false -> 
                         let msg = reader.ReadLine() |> Parser.parseLine
-                        if msg.IsNone then Failure i
-                        else (*(if msg.Value.Source <> null && msg.Value.Source.Length > 20 then printfn "%s" msg.Value.Source else ());*) readAndParse (msg::list) reader (i+1)
-                match readAndParse [] reader 1 with
+                        if msg.IsNone then readAndParse list reader (i+1) (f+1) (min first i)
+                        else readAndParse (msg::list) reader (i+1) f first
+                match readAndParse [] reader 1 0 System.Int32.MaxValue with
                 | Success list -> 
                     DataAccess.resetDatabase()
                     List.rev list |> List.iter (function (Some msg) -> DataAccess.insertMessage msg | None -> ())
@@ -40,17 +42,32 @@
             request ``process``
                 
     module Dashboard =
+        open Models
         do DotLiquid.Template.RegisterFilter(Filters.Filter().GetType())
-        type BrowseModel = {columns:string[]; data: Models.Message seq}
+        type BrowseModel<'a> = {columns:string[]; data: 'a seq}
         let index = request (fun _ -> if messageCount() > 0m then DotLiquid.page "dashboard/index.html" (DataAccess.getStatistics()) else Redirection.redirect "/parse")
 
-        let browse = request (fun req -> 
+        let browseG<'a> a = request (fun req -> 
                                 DotLiquid.page "dashboard/browse.html" 
-                                  { columns = [|"Time"; "Source"; "Message"; "Priority"|]; data = DataAccess.getAllMessages()})
+                                  { columns = [|"Time"; "Source"; "Message"; "Priority"|]; data = a})
+        let sanitize = Seq.map (fun m -> 
+                                {m with 
+                                    Source = if isNull m.Source then "" else m.Source
+                                    Priority = if not m.Priority.HasValue then System.Nullable<int>(-1) else m.Priority})
+        let browse = browseG(DataAccess.getAllMessages() |> sanitize)
+        let browseLevel l = browseG(DataAccess.getMessagesWithPriority(l))
+        let browseSource s = browseG(DataAccess.getMessagesFromSource(s))
+
+        let sources = request ( fun req -> 
+                                    DotLiquid.page "dashboard/browse.html"
+                                        { columns = [|"Source"; "Count"|]; data = DataAccess.getAllSources()})
 
         let filter = choose [
                         path "/dashboard" >=> index
                         path "/dashboard/browse" >=> browse
+                        path "/dashboard/browse/sources" >=> sources
+                        pathScan "/dashboard/browse/level/%d" browseLevel
+                        pathScan "/dashboard/browse/source/%s" browseSource
                         ]
 
     let mainApp = 
@@ -60,3 +77,4 @@
                 Dashboard.filter
                 Files.browseHome
                ]
+    
