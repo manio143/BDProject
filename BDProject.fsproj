@@ -65,6 +65,7 @@
     <Compile Include="Parser.fs" />
     <Compile Include="Queries.fs" />
     <Compile Include="DataAccess.fs" />
+    <Compile Include="CustomFilter.fs" />
     <Compile Include="Web.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

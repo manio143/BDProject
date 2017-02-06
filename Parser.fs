@@ -19,20 +19,20 @@
             let source = 
                 if source.StartsWith("[") then source.Substring(1, source.Length - 2)
                 else source.Substring(0, source.Length - 2)
-            Some ({Id = 0; Msg = msg; Level = nullable level; Source = source; Time = time})
+            Some ({Id = 0; Message = msg; Priority = nullable level; Source = source; Time = time})
         | Regex @"\[\s*([0-9]*\.[0-9]{6})\]\s(.{1,45}?: |\[.{1,45}\] )(.*)" [time; source; msg] ->
             let time = decimal time
             let source = 
                 if source.StartsWith("[") then source.Substring(1, source.Length - 2)
                 else source.Substring(0, source.Length - 2)
-            Some ({Id = 0; Msg = msg; Level = System.Nullable(); Source = source; Time = time})
+            Some ({Id = 0; Message = msg; Priority = System.Nullable(); Source = source; Time = time})
         | Regex @"<([0-9])>\[\s*([0-9]*\.[0-9]{6})\]\s(.*)" [level; time; msg] ->
             let level = int level
             let time = decimal time
-            Some ({Id = 0; Msg = msg; Level = nullable level; Source = null; Time = time})
+            Some ({Id = 0; Message = msg; Priority = nullable level; Source = null; Time = time})
         | Regex @"\[\s*([0-9]*\.[0-9]{6})\]\s(.*)" [time; msg] ->
             let time = decimal time
-            Some ({Id = 0; Msg = msg; Level = System.Nullable(); Source = null; Time = time})
+            Some ({Id = 0; Message = msg; Priority = System.Nullable(); Source = null; Time = time})
         | _-> None
 
     let parseText (text:string) =
