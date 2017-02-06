@@ -49,7 +49,7 @@
         queryP<Message, PriorityParam> (SELECT_MESSAGES_WHERE_LEVEL ">") {PPriority = l}
 
     let getAllSources () =
-        query<string> SELECT_SOURCES
+        query<Source> SELECT_SOURCES
 
     let getMessagesFromSource src =
         queryP<Message, SourceParam> SELECT_MESSAGES_WHERE_SOURCE {Src = src; Id = 0}

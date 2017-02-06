@@ -29,7 +29,10 @@ let ORDERED = "
 
 let SELECT_MESSAGES_WHERE_LEVEL sign = SELECT_MESSAGES + "WHERE Priority "+sign+" "+param+"PPriority"+ORDERED
 
-let SELECT_SOURCES = "SELECT source FROM Sources"
+let SELECT_SOURCES = "SELECT source, COUNT(*) as Count FROM Sources 
+                        JOIN MessageSources ON (Sources.id = MessageSources.source_id)
+                        GROUP BY source
+                        ORDER BY COUNT(*) DESC"
 
 let SELECT_MESSAGES_WHERE_SOURCE = SELECT_MESSAGES + "WHERE source = "+param+"Src" + ORDERED
 

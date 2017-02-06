@@ -17,7 +17,7 @@
             let level = int level
             let time = decimal time
             let source = 
-                if source.StartsWith("[") then source.Substring(1, source.Length - 2)
+                if source.StartsWith("[") then source.Substring(1, source.Length - 3)
                 else source.Substring(0, source.Length - 2)
             Some ({Id = 0; Message = msg; Priority = nullable level; Source = source; Time = time})
         | Regex @"\[\s*([0-9]*\.[0-9]{6})\]\s(.{1,45}?: |\[.{1,45}\] )(.*)" [time; source; msg] ->

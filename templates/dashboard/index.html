@@ -37,14 +37,14 @@
                         <button class="btn-link">Browse</button>
                     </a>
                     <h4>Browse sources</h4>
-                    <a>TODO</a>
+                    <a href="/dashboard/browse/sources">Sources</a>
                 </div>
                 <div class="half"> 
                     <h4>Statistics</h4>
                     <table>
-                        <tr><td>Number of messages:</td> <td>{{ model.Msgs }}</td></tr>
+                        <tr><td>Number of messages:</td> <td>{{ model.Messages }}</td></tr>
                         <tr><td>Number of sources:</td> <td>{{ model.Sources }}</td></tr>
-                        <tr><td>Source with most messages:</td> <td>{{ model.Source_With_Most_Msgs }}</td></tr>
+                        <tr><td>Source with most messages:</td> <td>{{ model.Source_With_Most_Messages }}</td></tr>
                         {% if model.Source_With_Most_Errors %}<tr><td>Source with most errors:</td> <td>{{ model.Source_With_Most_Errors}}</td></tr>{% endif %}
                         <tr><td>Linux version:</td> <td>{{ model.Kernel_Version.Version }}</td></tr>
                     </table>

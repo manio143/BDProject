@@ -14,6 +14,8 @@
                    }
     type LinuxKernel = {Version: string}
 
+    type Source = { Source: string; Count: decimal }
+
     type PriorityWithCount = {Priority: int; Count: decimal;}
 
     type Statistics = {
