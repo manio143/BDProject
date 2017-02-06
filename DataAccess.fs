@@ -14,11 +14,11 @@
     open Parameters
     open Queries
 
-    let mutable updateState = {MsgId = 0; SourceId = 0; MsgSourceId = 0;}
+    let mutable updateState = {MessageId = 0; SourceId = 0; MessageSourceId = 0;}
 
     let insertMessage (msg:Message) =
-        updateState.MsgId <- updateState.MsgId + 1
-        executeP INSERT_MESSAGE (asMessageParam {msg with Id = updateState.MsgId}) |> ignore
+        updateState.MessageId <- updateState.MessageId + 1
+        executeP INSERT_MESSAGE (asMessageParam {msg with Id = updateState.MessageId}) |> ignore
 
         match msg.Source with
         | null -> ()
@@ -29,24 +29,24 @@
                 id <- Some (updateState.SourceId)
                 executeP INSERT_SOURCE {Id = id.Value; Src = src} |> ignore
             
-            updateState.MsgSourceId <- updateState.MsgSourceId + 1
+            updateState.MessageSourceId <- updateState.MessageSourceId + 1
             executeP INSERT_MESSAGE_SOURCE 
-                {Id = updateState.MsgSourceId; MsgId = updateState.MsgId; SourceId = updateState.SourceId} |> ignore
+                {Id = updateState.MessageSourceId; MessageId = updateState.MessageId; SourceId = updateState.SourceId} |> ignore
 
     let resetDatabase () = 
         execute DELETE_MESSAGE_SOURCES |> ignore
         execute DELETE_SOURCES |> ignore
         execute DELETE_MESSAGES |> ignore
-        updateState <- {MsgId = 0; SourceId = 0; MsgSourceId = 0;}
+        updateState <- {MessageId = 0; SourceId = 0; MessageSourceId = 0;}
 
     let getAllMessages () = 
         query<Message> (SELECT_MESSAGES + ORDERED)
 
-    let getMessagesWithLevel l =
-        queryP<Message, LevelParam> (SELECT_MESSAGES_WHERE_LEVEL "=") {PLevel = l} 
+    let getMessagesWithPriority l =
+        queryP<Message, PriorityParam> (SELECT_MESSAGES_WHERE_LEVEL "=") {PPriority = l} 
 
-    let getMessagesWithLevelGreaterThan l =
-        queryP<Message, LevelParam> (SELECT_MESSAGES_WHERE_LEVEL ">") {PLevel = l}
+    let getMessagesWithPriorityGreaterThan l =
+        queryP<Message, PriorityParam> (SELECT_MESSAGES_WHERE_LEVEL ">") {PPriority = l}
 
     let getAllSources () =
         query<string> SELECT_SOURCES
@@ -56,17 +56,18 @@
 
     let getKernellVersion () =
         let msg = query<Message> SELECT_KERNEL_VERSION |> Seq.head
-        match msg.Msg with
+        match msg.Message with
         | Parser.Regex "Linux version ([0-9\.-]+) .*" [ver] ->
             {Version = ver}
         | _ -> {Version = "N/A"}
 
+    let messageCount() = query<decimal> SELECT_NUMBER_OF_MESSAGES |> Seq.head
     let getStatistics () =
-        let msgs = query<decimal> SELECT_NUMBER_OF_MESSAGES |> Seq.head
+        let msgs = messageCount()
         let prwc = query<PriorityWithCount> SELECT_NUMBER_OF_MESSAGES_BY_PRIORITY
         let sources = query<decimal> SELECT_NUMBER_OF_SOURCES |> Seq.head
         let swmm = query<string> SELECT_SOURCES_ORDERED_BY_MESSAGE_COUNT |> Seq.head
         let swme =
             let s = query<string> SELECT_SOURCES_WITH_ERRORS_ORDERED_BY_MESSAGE_COUNT
             if Seq.isEmpty s then null else s |> Seq.head
-        {MsgsByPriority = List.ofSeq prwc; Sources = sources; SourceWithMostMsgs = swmm; SourceWithMostErrors = swme; KernelVersion = getKernellVersion(); Msgs = msgs}
+        {MessagesByPriority = List.ofSeq prwc; Sources = sources; SourceWithMostMessages = swmm; SourceWithMostErrors = swme; KernelVersion = getKernellVersion(); Messages = msgs}

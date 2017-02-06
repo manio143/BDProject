@@ -40,9 +40,13 @@
             request ``process``
                 
     module Dashboard =
-        let index = request (fun _ -> DotLiquid.page "dashboard/index.html" (DataAccess.getStatistics()))
+        do DotLiquid.Template.RegisterFilter(Filters.Filter().GetType())
+        type BrowseModel = {columns:string[]; data: Models.Message seq}
+        let index = request (fun _ -> if messageCount() > 0m then DotLiquid.page "dashboard/index.html" (DataAccess.getStatistics()) else Redirection.redirect "/parse")
 
-        let browse = request (fun req -> DotLiquid.page "dashboard/browse.html" (DataAccess.getAllMessages()))
+        let browse = request (fun req -> 
+                                DotLiquid.page "dashboard/browse.html" 
+                                  { columns = [|"Time"; "Source"; "Message"; "Priority"|]; data = DataAccess.getAllMessages()})
 
         let filter = choose [
                         path "/dashboard" >=> index
