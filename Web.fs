@@ -55,8 +55,8 @@
                                     Source = if isNull m.Source then "" else m.Source
                                     Priority = if not m.Priority.HasValue then System.Nullable<int>(-1) else m.Priority})
         let browse = browseG(DataAccess.getAllMessages() |> sanitize)
-        let browseLevel l = browseG(DataAccess.getMessagesWithPriority(l))
-        let browseSource s = browseG(DataAccess.getMessagesFromSource(s))
+        let browseLevel l = browseG(DataAccess.getMessagesWithPriority(l) |> sanitize)
+        let browseSource s = browseG(DataAccess.getMessagesFromSource(s) |> sanitize)
 
         let sources = request ( fun req -> 
                                     DotLiquid.page "dashboard/browse.html"
