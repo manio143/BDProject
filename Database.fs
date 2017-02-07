@@ -35,4 +35,4 @@
         Dapper.SqlMapper.Execute(cnn, cmd, param)
 
     
-    let chosenDb = Oracle
+    let chosenDb = MySQL

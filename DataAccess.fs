@@ -70,4 +70,4 @@
         let swme =
             let s = query<string> SELECT_SOURCES_WITH_ERRORS_ORDERED_BY_MESSAGE_COUNT
             if Seq.isEmpty s then null else s |> Seq.head
-        {MessagesByPriority = List.ofSeq prwc; Sources = sources; SourceWithMostMessages = swmm; SourceWithMostErrors = swme; KernelVersion = getKernellVersion(); Messages = msgs}
+        {MessagesByPriority = List.ofSeq prwc; Sources = int sources; SourceWithMostMessages = swmm; SourceWithMostErrors = swme; KernelVersion = getKernellVersion(); Messages = int msgs}

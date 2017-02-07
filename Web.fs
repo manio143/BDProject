@@ -16,7 +16,7 @@
         let index = DotLiquid.page "home/index.html" []
 
     module Parse =
-        let index error = DotLiquid.page "parse/index.html" error
+        let index (error:'a option) = DotLiquid.page "parse/index.html" error
         
         open System.IO
         
@@ -43,7 +43,7 @@
                 
     module Dashboard =
         open Models
-        do DotLiquid.Template.RegisterFilter(Filters.Filter().GetType())
+
         type BrowseModel<'a> = {columns:string[]; data: 'a seq}
 
         let index = request (fun _ -> if messageCount() > 0m then DotLiquid.page "dashboard/index.html" (DataAccess.getStatistics()) else Redirection.redirect "/parse")
@@ -61,7 +61,7 @@
 
         let sources = request ( fun req -> 
                                     DotLiquid.page "dashboard/browse.html"
-                                        { columns = [|"Source"; "Count"|]; data = DataAccess.getAllSources()})
+                                        { columns = [|"Source"; "Count"|]; data = DataAccess.getAllSources() |> Seq.map (fun s->(s:>DotLiquid.ILiquidizable).ToLiquid() :?> SourceR)})
 
         let filter = choose [
                         path "/dashboard" >=> index

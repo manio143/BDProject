@@ -14,14 +14,24 @@
                    }
     type LinuxKernel = {Version: string}
 
-    type Source = { Source: string; Count: decimal }
+    type SourceR = {Source: string; Count: int}
+    type Source(source: string, count: int) =
+        member x.Source = source
+        member x.Count = count
+        new(source: string, count: int64) = Source(source, int count)
+        new(source: string, count: decimal) = Source(source, int count)
+        interface DotLiquid.ILiquidizable with member x.ToLiquid () = {Source = source; Count = count} :> obj
 
-    type PriorityWithCount = {Priority: int; Count: decimal;}
+    type PriorityWithCount(priority: int, count: int) =
+        member x.Priority = priority
+        member x.Count = count
+        new(priority: int, count: int64) = PriorityWithCount(priority, int count)
+        new(priority: int, count: decimal) = PriorityWithCount(priority, int count)
 
     type Statistics = {
-                        Messages: decimal;
+                        Messages: int;
                         MessagesByPriority: PriorityWithCount list;
-                        Sources: decimal;
+                        Sources: int;
                         SourceWithMostMessages: string;
                         SourceWithMostErrors: string;
                         KernelVersion: LinuxKernel;

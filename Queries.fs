@@ -4,6 +4,8 @@
 #nowarn "49"
 #nowarn "26"
 
+open Database
+
 let param, column =
     match Database.chosenDb with 
     | Oracle -> ":", "\""
