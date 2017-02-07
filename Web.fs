@@ -45,18 +45,19 @@
         open Models
         do DotLiquid.Template.RegisterFilter(Filters.Filter().GetType())
         type BrowseModel<'a> = {columns:string[]; data: 'a seq}
+
         let index = request (fun _ -> if messageCount() > 0m then DotLiquid.page "dashboard/index.html" (DataAccess.getStatistics()) else Redirection.redirect "/parse")
 
-        let browseG<'a> a = request (fun req -> 
+        let browseG<'a> getData = request (fun req ->
                                 DotLiquid.page "dashboard/browse.html" 
-                                  { columns = [|"Time"; "Source"; "Message"; "Priority"|]; data = a})
+                                  { columns = [|"Time"; "Source"; "Message"; "Priority"|]; data = getData()})
         let sanitize = Seq.map (fun m -> 
                                 {m with 
                                     Source = if isNull m.Source then "" else m.Source
                                     Priority = if not m.Priority.HasValue then System.Nullable<int>(-1) else m.Priority})
-        let browse = browseG(DataAccess.getAllMessages() |> sanitize)
-        let browseLevel l = browseG(DataAccess.getMessagesWithPriority(l) |> sanitize)
-        let browseSource s = browseG(DataAccess.getMessagesFromSource(s) |> sanitize)
+        let browse = browseG(fun () -> DataAccess.getAllMessages() |> sanitize)
+        let browseLevel l = browseG(fun () -> DataAccess.getMessagesWithPriority(l) |> sanitize)
+        let browseSource s = browseG(fun () -> DataAccess.getMessagesFromSource(s) |> sanitize)
 
         let sources = request ( fun req -> 
                                     DotLiquid.page "dashboard/browse.html"
